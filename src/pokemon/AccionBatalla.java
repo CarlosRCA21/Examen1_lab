@@ -8,6 +8,6 @@ package pokemon;
  *
  * @author ANGILI PALACIOS
  */
-public class AccionBatalla {
-    
+public enum AccionBatalla {
+    ATACAR, HABILIDAD_ESPECIAL, RECUPERAR, CAMBIAR_POKEMON
 }

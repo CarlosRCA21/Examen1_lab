@@ -8,6 +8,6 @@ package pokemon;
  *
  * @author ANGILI PALACIOS
  */
-public class EstadoBatalla {
-    
+public enum EstadoBatalla {
+  PREPARACION, ESPERANDO_ACCION, RESOLVIENDO_RONDA, ELEGIR_REEMPLAZO, VICTORIA, DERROTA, EMPATE
 }
