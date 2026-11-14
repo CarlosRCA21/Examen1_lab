@@ -15,6 +15,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -47,6 +48,7 @@ public class PanelBatalla extends JPanel implements ActionListener {
     private final JButton botonCambiar = Estilo.crearBoton("Cambiar Pokémon", Estilo.AZUL);
     private final JButton botonReemplazo = Estilo.crearBoton("Enviar reemplazo", Estilo.NARANJA);
     private final JButton botonResultado = Estilo.crearBoton("Ver resultado", Estilo.AZUL_OSCURO);
+    private final JButton botonRendirse = Estilo.crearBoton("Rendirse", Estilo.AZUL_OSCURO);
 
     public PanelBatalla(VentanaPrincipal ventana) {
         this.ventana = ventana;
@@ -114,6 +116,7 @@ public class PanelBatalla extends JPanel implements ActionListener {
         botones.add(botonCambiar);
         botones.add(botonReemplazo);
         botones.add(botonResultado);
+        botones.add(botonRendirse);
         JPanel sur = new JPanel(new BorderLayout(0, 6));
         sur.setOpaque(false);
         sur.add(etiquetaMensaje, BorderLayout.NORTH);
@@ -129,6 +132,7 @@ public class PanelBatalla extends JPanel implements ActionListener {
         botonRecuperar.setToolTipText("Recupera el 25% de los PS máximos");
         botonCambiar.setToolTipText("Primero selecciona un Pokémon en Tu equipo");
         botonReemplazo.setToolTipText("Selecciona en Tu equipo al Pokémon que entra en combate");
+        botonRendirse.setToolTipText("Abandonar el combate: cuenta como derrota");
 
         botonAtacar.addActionListener(this);
         botonHabilidad.addActionListener(this);
@@ -136,6 +140,7 @@ public class PanelBatalla extends JPanel implements ActionListener {
         botonCambiar.addActionListener(this);
         botonReemplazo.addActionListener(this);
         botonResultado.addActionListener(this);
+        botonRendirse.addActionListener(this);
     }
 
     public void iniciar(MotorBatalla motor) {
@@ -147,7 +152,6 @@ public class PanelBatalla extends JPanel implements ActionListener {
         agregarLinea("¡Comienza la batalla! " + motor.getJugador().getNombre() + " vs "
                 + motor.getRival().getNombre() + ".");
         refrescar();
-        
     }
 
     private void refrescar() {
@@ -166,6 +170,7 @@ public class PanelBatalla extends JPanel implements ActionListener {
         boolean cambiar = false;
         boolean reemplazo = false;
         boolean terminada = false;
+        boolean rendirse = false;
         String turno = "";
 
         EstadoBatalla estado = motor.getEstado();
@@ -175,10 +180,12 @@ public class PanelBatalla extends JPanel implements ActionListener {
                 habilidad = motor.esAccionValida(AccionBatalla.HABILIDAD_ESPECIAL);
                 recuperar = motor.esAccionValida(AccionBatalla.RECUPERAR);
                 cambiar = motor.esAccionValida(AccionBatalla.CAMBIAR_POKEMON);
+                rendirse = true;
                 turno = "Turno de " + motor.getJugador().getNombre() + ": elige una acción";
                 break;
             case ELEGIR_REEMPLAZO:
                 reemplazo = true;
+                rendirse = true;
                 turno = "Tu Pokémon fue debilitado: selecciona en Tu equipo a su reemplazo";
                 break;
             case VICTORIA:
@@ -201,6 +208,7 @@ public class PanelBatalla extends JPanel implements ActionListener {
         Estilo.ponerEstado(botonCambiar, cambiar, Estilo.AZUL);
         Estilo.ponerEstado(botonReemplazo, reemplazo, Estilo.NARANJA);
         Estilo.ponerEstado(botonResultado, terminada, Estilo.AZUL_OSCURO);
+        Estilo.ponerEstado(botonRendirse, rendirse, Estilo.AZUL_OSCURO);
     }
 
     private void llenarLista(List<Pokemon> equipo, Pokemon activo) {
@@ -254,6 +262,25 @@ public class PanelBatalla extends JPanel implements ActionListener {
             reemplazar();
         } else if (e.getSource() == botonResultado) {
             ventana.mostrarResultado();
+        } else if (e.getSource() == botonRendirse) {
+            rendirse();
+        }
+    }
+
+    private void rendirse() {
+        int respuesta = JOptionPane.showConfirmDialog(this,
+                "¿Seguro que quieres rendirte? El combate terminará y contará como derrota.",
+                "Rendirse", JOptionPane.YES_NO_OPTION);
+        if (respuesta != JOptionPane.YES_OPTION) {
+            return;
+        }
+        try {
+            motor.rendirse();
+            agregarLinea(motor.getJugador().getNombre() + " se rindió. El combate terminó.");
+            Estilo.limpiarMensaje(etiquetaMensaje);
+            ventana.mostrarResultado();
+        } catch (IllegalStateException ex) {
+            Estilo.mostrarMensaje(etiquetaMensaje, ex.getMessage(), true);
         }
     }
 

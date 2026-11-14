@@ -93,6 +93,10 @@ public class PanelResultado extends JPanel implements ActionListener {
             color = Estilo.ROJO;
             titulo = "DERROTA";
             detalle = nombre + ", perdiste la batalla contra " + rival + ".";
+            if (motor.isRendido()) {
+                titulo = "TE RENDISTE";
+                detalle = nombre + " se rindió. El combate terminó y " + rival + " gana por abandono.";
+            }
         }
         banner.setBackground(color);
         etiquetaTitulo.setText(titulo);

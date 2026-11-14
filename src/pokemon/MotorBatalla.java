@@ -18,6 +18,7 @@ public class MotorBatalla {
     private Pokemon activoRival;
     private int numeroRonda;
     private EstadoBatalla estado;
+    private boolean rendido = false;
     private static final int LIMITE_RONDAS = 50;
     
     public MotorBatalla(Entrenador jugador, List<Pokemon> catalogoGlobal) {
@@ -74,6 +75,21 @@ public class MotorBatalla {
     public Pokemon getActivoJugador() { return activoJugador; }
     public Pokemon getActivoRival() { return activoRival; }
     public int getNumeroRonda() { return numeroRonda; }
+
+    public boolean isRendido() {
+        return rendido;
+    }
+
+    public void rendirse() {
+        if (estado != EstadoBatalla.ESPERANDO_ACCION && estado != EstadoBatalla.ELEGIR_REEMPLAZO) {
+            throw new IllegalStateException("La batalla no está en curso.");
+        }
+        if (estado == EstadoBatalla.ESPERANDO_ACCION) {
+            numeroRonda--;
+        }
+        rendido = true;
+        estado = EstadoBatalla.DERROTA;
+    }
 
     private boolean puedeUsar(Pokemon p, AccionBatalla accion) {
         boolean valida = false;
