@@ -10,5 +10,6 @@ package pokemon;
  */
 import java.io.Serializable;
 public interface Movimiento extends Serializable {
-    
+    String getNombre();
+    int ejecutar(Pokemon atacante, Pokemon defensor);
 }
