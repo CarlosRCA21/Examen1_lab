@@ -9,5 +9,12 @@ package pokemon;
  * @author ANGILI PALACIOS
  */
 public class PokemonFuego extends Pokemon{
-    
+    public PokemonFuego(String nombre, int ps, int ataque, int defensa, int velocidad) {
+        super(nombre, TipoPokemon.FUEGO, ps, ataque, defensa, velocidad);
+    }
+        @Override
+            
+    public String ejecutarHabilidadEspecial(Pokemon objetivo) {
+    return "Llamarada ejecutada con exito";
+    }
 }
