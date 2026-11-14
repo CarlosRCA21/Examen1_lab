@@ -8,6 +8,33 @@ package pokemon;
  *
  * @author ANGILI PALACIOS
  */
-public class Entrenador {
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+public class Entrenador implements Serializable{
+    private String nombre;
+    private List<Pokemon> equipo;
+
+    public Entrenador(String nombre) {
+        this.nombre = nombre;
+        this.equipo = new ArrayList<>();
+    }
+    public String getNombre() { return nombre; }
+    public List<Pokemon> getEquipo() { return equipo; }
     
+    public boolean agregarPokemon(Pokemon p) {
+        if (equipo.size() < 6) {
+            equipo.add(p);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean quitarPokemon(int index) {
+        if (index >= 0 && index < equipo.size()) {
+            equipo.remove(index);
+            return true;
+        }
+        return false;
+    }
 }
