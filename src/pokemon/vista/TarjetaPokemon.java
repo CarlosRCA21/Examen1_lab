@@ -87,7 +87,7 @@ public class TarjetaPokemon extends JPanel {
 
         etiquetaStats.setText("ATQ " + pokemon.getAtaque() + "   DEF " + pokemon.getDefensa()
                 + "   VEL " + pokemon.getVelocidad());
-        areaHabilidad.setText("Habilidad: " + pokemon.getDescripcionHabilidad());
+        areaHabilidad.setText("Habilidad: " + Estilo.descripcionHabilidad(pokemon.getTipo()));
         etiquetaUsos.setText("Usos restantes:  habilidad " + pokemon.getUsosHabilidadEspecial()
                 + "  |  recuperar " + pokemon.getUsosRecuperar());
     }

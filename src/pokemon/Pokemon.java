@@ -10,6 +10,7 @@ package pokemon;
  */
 import java.io.Serializable;
 public abstract class Pokemon implements Serializable, Cloneable {
+    private static final long serialVersionUID = 1L;
     protected String nombre;
     protected TipoPokemon tipo;
     protected int nivel;
@@ -49,6 +50,16 @@ public abstract class Pokemon implements Serializable, Cloneable {
             return true;
         }
         return false;
+    }
+
+    public int calcularDano(Pokemon objetivo, int potencia) {
+        double mult = tipo.getEfectividadContra(objetivo.getTipo());
+        double calculo = (ataque + nivel + potencia - (objetivo.getDefensa() / 2.0)) * mult;
+        return Math.max(1, (int) Math.round(calculo));
+    }
+
+    public void curar(int cantidad) {
+        this.psActuales = Math.min(psMaximos, psActuales + cantidad);
     }
 
     public abstract String ejecutarHabilidadEspecial(Pokemon objetivo);

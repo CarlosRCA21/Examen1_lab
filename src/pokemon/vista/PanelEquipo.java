@@ -189,13 +189,13 @@ public class PanelEquipo extends JPanel implements ActionListener, ListSelection
             return;
         }
         Pokemon elegido = ventana.getCatalogo().get(indice);
-        try {
-            ventana.getEntrenador().agregarPokemon(elegido);
+        Entrenador entrenador = ventana.getEntrenador();
+        if (entrenador.contarCopias(elegido.getNombre()) >= 2) {
+            Estilo.mostrarMensaje(etiquetaMensaje, "Ya tienes 2 copias de " + elegido.getNombre() + ".", true);
+        } else if (entrenador.agregarPokemon(elegido.clone())) {
             Estilo.mostrarMensaje(etiquetaMensaje, elegido.getNombre() + " se agregó a tu equipo.", false);
-        } catch (IllegalStateException ex) {
-            Estilo.mostrarMensaje(etiquetaMensaje, ex.getMessage(), true);
-        } catch (IllegalArgumentException ex) {
-            Estilo.mostrarMensaje(etiquetaMensaje, ex.getMessage(), true);
+        } else {
+            Estilo.mostrarMensaje(etiquetaMensaje, "Tu equipo ya está lleno (" + MAXIMO_EQUIPO + "/" + MAXIMO_EQUIPO + ").", true);
         }
         refrescarEquipo();
     }
@@ -207,12 +207,11 @@ public class PanelEquipo extends JPanel implements ActionListener, ListSelection
             return;
         }
         String nombre = ventana.getEntrenador().getEquipo().get(indice).getNombre();
-        try {
-            ventana.getEntrenador().quitarPokemon(indice);
+        if (ventana.getEntrenador().quitarPokemon(indice)) {
             tarjeta.limpiar();
             Estilo.mostrarMensaje(etiquetaMensaje, nombre + " salió de tu equipo.", false);
-        } catch (IllegalArgumentException ex) {
-            Estilo.mostrarMensaje(etiquetaMensaje, ex.getMessage(), true);
+        } else {
+            Estilo.mostrarMensaje(etiquetaMensaje, "No se pudo quitar ese Pokémon.", true);
         }
         refrescarEquipo();
     }

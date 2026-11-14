@@ -79,6 +79,28 @@ public class Estilo {
         return nombre;
     }
 
+    public static String descripcionHabilidad(TipoPokemon tipo) {
+        String texto = "";
+        switch (tipo) {
+            case FUEGO:
+                texto = "Llamarada: daño elevado (potencia 20), sin efecto secundario.";
+                break;
+            case AGUA:
+                texto = "Hidrobomba: daño moderado (potencia 18) y recupera el 10% de sus PS máximos.";
+                break;
+            case PLANTA:
+                texto = "Drenadoras: daño moderado (potencia 18) y absorbe la mitad del daño como PS.";
+                break;
+            case ELECTRICO:
+                texto = "Impactrueno: daño moderado (potencia 17) con 25% de golpe crítico (x1,5).";
+                break;
+            default:
+                texto = "";
+                break;
+        }
+        return texto;
+    }
+
     public static JButton crearBoton(String texto, Color fondo) {
         JButton boton = new JButton(texto);
         boton.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 15));

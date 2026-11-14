@@ -19,7 +19,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.ListSelectionModel;
-import pokemon.control.MotorBatalla;
+import pokemon.MotorBatalla;
 import pokemon.AccionBatalla;
 import pokemon.EstadoBatalla;
 import pokemon.Pokemon;
@@ -147,6 +147,7 @@ public class PanelBatalla extends JPanel implements ActionListener {
         agregarLinea("¡Comienza la batalla! " + motor.getJugador().getNombre() + " vs "
                 + motor.getRival().getNombre() + ".");
         refrescar();
+        
     }
 
     private void refrescar() {

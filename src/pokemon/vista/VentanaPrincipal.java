@@ -9,11 +9,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import pokemon.control.FabricaCatalogo;
-import pokemon.control.GestorSerializacion;
-import pokemon.control.MotorBatalla;
-import pokemon.modelo.Entrenador;
-import pokemon.modelo.Pokemon;
+import pokemon.CatalogoPorDefecto;
+import pokemon.Entrenador;
+import pokemon.EstadoBatalla;
+import pokemon.GestorSerializacion;
+import pokemon.MotorBatalla;
+import pokemon.Pokemon;
 
 public class VentanaPrincipal extends JFrame {
 
@@ -24,8 +25,6 @@ public class VentanaPrincipal extends JFrame {
 
     private final CardLayout cartas = new CardLayout();
     private final JPanel contenedor = new JPanel(cartas);
-    private final FabricaCatalogo fabrica = new FabricaCatalogo();
-    private final GestorSerializacion gestor = new GestorSerializacion();
     private final List<Pokemon> catalogo;
     private Entrenador entrenador = null;
     private MotorBatalla motor = null;
@@ -38,7 +37,7 @@ public class VentanaPrincipal extends JFrame {
 
     public VentanaPrincipal() {
         super("Batallas Pokémon");
-        catalogo = fabrica.getCatalogo();
+        catalogo = CatalogoPorDefecto.obtenerCatalogoCompleto();
 
         panelInicio = new PanelInicio(this);
         panelEquipo = new PanelEquipo(this);
@@ -78,15 +77,16 @@ public class VentanaPrincipal extends JFrame {
     }
 
     public void guardarEquipo() throws IOException {
-        equipoGuardado = gestor.serializar(entrenador);
+        equipoGuardado = GestorSerializacion.guardarEquipoEnMemoria(entrenador);
     }
 
     public void restaurarEquipo() throws IOException, ClassNotFoundException {
-        entrenador = gestor.deserializar(equipoGuardado);
+        entrenador = GestorSerializacion.restaurarEquipoDesdeMemoria(equipoGuardado);
     }
 
     public void comenzarBatalla() {
         motor = new MotorBatalla(entrenador, catalogo);
+        motor.setEstado(EstadoBatalla.ESPERANDO_ACCION);
         panelBatalla.iniciar(motor);
         cartas.show(contenedor, BATALLA);
     }

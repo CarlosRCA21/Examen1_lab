@@ -7,7 +7,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import javax.swing.JPanel;
-import pokemon.modelo.TipoPokemon;
+import pokemon.TipoPokemon;
 
 public class PanelLogo extends JPanel {
 
